@@ -15,10 +15,6 @@ exclude = ["/tools/"]
 strip = true
 lto = "thin"
 
-[[bin]]
-name = "keepawake"
-required-features = ["bin"]
-
 [dependencies]
 anyhow = "1.0"
 cfg-if = "1.0"
