@@ -11,9 +11,6 @@ keywords = ["caffeinate", "systemd-inhibit", "idle", "sleep", "power-management"
 categories = ["command-line-utilities"]
 exclude = ["/tools/"]
 
-[features]
-bin = ["dep:clap", "dep:clap_complete", "dep:ctrlc", "dep:shadow-rs", "dep:sysinfo"]
-
 [profile.release]
 strip = true
 lto = "thin"
