@@ -42,6 +42,44 @@ impl Awake {
         Ok(awake)
     }
 
+    pub fn set_display(&mut self, display: bool) -> Result<()> {
+        if self.options.display == display {
+            return Ok(());
+        }
+        self.options.display = display;
+        if self.options.display {
+            unsafe {
+                if self.display_assertion == 0 {
+                    let result = IOPMAssertionCreateWithName(
+                        // TODO Are those casts the best way? No way to make a const CFString?
+                        CFString::from_static_string(kIOPMAssertionTypePreventUserIdleDisplaySleep)
+                            .as_concrete_TypeRef() as CFStringRef,
+                        kIOPMAssertionLevelOn,
+                        CFString::new(self.options.reason_or_default()).as_concrete_TypeRef()
+                            as CFStringRef,
+                        &mut self.display_assertion,
+                    );
+                    if result != kIOReturnSuccess as i32 {
+                        // TODO Better error?
+                        return Err(anyhow!("IO error: {:#x}", result));
+                    }
+                } else {
+                    return Err(anyhow!("display_assertion mismatch"));
+                }
+            }
+        } else {
+            if self.display_assertion != 0 {
+                unsafe {
+                    IOPMAssertionRelease(self.display_assertion);
+                }
+                self.display_assertion = 0;
+            } else {
+                return Err(anyhow!("display_assertion mismatch"));
+            }
+        }
+        Ok(())
+    }
+
     fn set(&mut self) -> Result<()> {
         if self.options.display {
             unsafe {

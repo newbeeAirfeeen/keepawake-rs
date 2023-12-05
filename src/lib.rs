@@ -127,3 +127,10 @@ impl Default for Builder {
 pub struct AwakeHandle {
     _imp: sys::Awake,
 }
+
+impl AwakeHandle {
+    #[cfg(target_os = "macos")]
+    pub fn set_display(&mut self, display: bool) -> Result<()> {
+        self._imp.set_display(display)
+    }
+}
