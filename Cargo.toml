@@ -34,7 +34,7 @@ features = [
 zbus = "3.12"
 
 [target.'cfg(target_os = "macos")'.dependencies]
-apple-sys = { version = "0.2", features = ["CoreFoundation", "IOKit"] }
+apple-sys = {git = "https://github.com/newbeeAirfeeen/apple-sys.git", features = ["CoreFoundation", "IOKit"] }
 core-foundation = "0.9"
 
 [build-dependencies]
